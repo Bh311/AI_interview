@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-
+from flask_cors import CORS
 import PyPDF2
 from Services.resume_parser import extract_skills
 from Services.match_parser import calculate_match
@@ -11,15 +11,9 @@ import os
 
 
 app = Flask(__name__)
-from flask_cors import CORS
 
-CORS(app, resources={
-    r"/*": {
-        "origins": [
-            "https://ai-interview-sage-iota.vercel.app"
-        ]
-    }
-})
+
+CORS(app)
 
 from Services.evaluator import evaluate_answers
 from Services.ai_services import ai_evaluate   # 🔥 import AI
@@ -148,6 +142,9 @@ def upload_resume():
         else:
             text = file.read().decode('utf-8', errors='ignore')
 
+        if not text:
+            return jsonify({"error": "Empty resume"}), 400
+
         skills = extract_skills(text)
 
         return jsonify({
@@ -156,7 +153,7 @@ def upload_resume():
         })
 
     except Exception as e:
-        print("ERROR:", str(e))   # 🔥 VERY IMPORTANT
+        print("UPLOAD ERROR:", str(e))   # 🔥 SEE THIS IN LOGS
         return jsonify({"error": str(e)}), 500
 
 @app.route('/')
