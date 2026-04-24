@@ -131,29 +131,34 @@ def get_questions():
 
 @app.route('/upload', methods=['POST'])
 def upload_resume():
-    file = request.files.get('resume')
+    try:
+        file = request.files.get('resume')
 
-    if not file:
-        return jsonify({"error": "No file uploaded"}), 400
+        if not file:
+            return jsonify({"error": "No file uploaded"}), 400
 
-    text = ""
+        text = ""
 
-    # ✅ Handle PDF properly
-    if file.filename.endswith('.pdf'):
-        pdf = PyPDF2.PdfReader(file)
-        for page in pdf.pages:
-            text += page.extract_text()
+        if file.filename.endswith('.pdf'):
+            pdf = PyPDF2.PdfReader(file)
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text
+        else:
+            text = file.read().decode('utf-8', errors='ignore')
 
-    # ✅ Handle TXT
-    else:
-        text = file.read().decode('utf-8', errors='ignore')
+        skills = extract_skills(text)
 
-    skills = extract_skills(text)
+        return jsonify({
+            "skills": skills,
+            "preview": text[:200]
+        })
 
-    return jsonify({
-        "skills": skills,
-        "preview": text[:200]
-    })
+    except Exception as e:
+        print("ERROR:", str(e))   # 🔥 VERY IMPORTANT
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/')
 def home():
     return "AI Interview Backend is Running 🚀"
