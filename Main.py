@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+
 import PyPDF2
 from Services.resume_parser import extract_skills
 from Services.match_parser import calculate_match
@@ -10,8 +10,16 @@ from Services.predictor import predict_selection
 import os
 
 
-app = Flask(__name__)
-CORS(app)
+
+from flask_cors import CORS
+
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "https://ai-interview-sage-iota.vercel.app"
+        ]
+    }
+})
 
 from Services.evaluator import evaluate_answers
 from Services.ai_services import ai_evaluate   # 🔥 import AI
