@@ -146,7 +146,9 @@ def upload_resume():
         "skills": skills,
         "preview": text[:200]
     })
-
+@app.route('/')
+def home():
+    return "AI Interview Backend is Running 🚀"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))   # 🔥 IMPORTANT
