@@ -6,7 +6,8 @@ from Services.match_parser import calculate_match
 from Services.interview import generate_questions
 from Services.evaluator import evaluate_answers
 from Services.predictor import predict_selection
-
+    
+import os
 
 
 app = Flask(__name__)
@@ -145,7 +146,8 @@ def upload_resume():
         "skills": skills,
         "preview": text[:200]
     })
-    
-    
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))   # 🔥 IMPORTANT
+    app.run(host="0.0.0.0", port=port)
