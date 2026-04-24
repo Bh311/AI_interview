@@ -144,13 +144,22 @@ function App() {
   };
 
   // Upload
-  const uploadResume = async () => {
-    const formData = new FormData();
-    formData.append("resume", file);
+const uploadResume = async () => {
+  const formData = new FormData();
+  formData.append("resume", file);
 
-    const res = await axios.post("https://aiinterview-production-902c.up.railway.app/upload", formData);
-    setSkills(res.data.skills);
-  };
+  const res = await axios.post(
+    "https://aiinterview-production-902c.up.railway.app/upload",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  setSkills(res.data.skills);
+};
 
   // Get Questions
   const getQuestions = async () => {
