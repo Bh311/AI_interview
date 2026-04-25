@@ -31,9 +31,18 @@ An AI-powered web application that conducts virtual interviews using voice inter
 ---
 
 ## 📸 Screenshots
-scree
 
----
+### Upload Resume
+![Upload](Upload.png)
+
+### Extracted Skills
+![Skills](Skills.png)
+
+### Interview Screen
+![Interview](Interview.png)
+
+### Final Result
+![Result](Result.png)
 
 ## 👨‍💻 Author
 
